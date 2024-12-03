@@ -23,24 +23,37 @@ func coPrime() (int, int) {
 
 }
 
-func rsa(str string) string {
+func rsa(str string) (string,string) {
 	p, q := coPrime()
 	fmt.Println(p, q)
 	n := p * q
 	z := (p - 1) * (q - 1)
 
 	e := rand.IntN(z-2) + 2
+	if 1 < e && e < z{
+		fmt.Println("yes")
+	}else{
+		return "",""
+	}
+
 	d := (e - 1) % (p - 1) * (q - 1)
 
-	_ = d
-	_=n
-	//var cipher string=""
-	// for  _,i := range str {
-	// 	cipher+=string(i)
-	// }
-	//its like getting ascii so have to cast to string
-	cipher:=[]rune(str)
-	return string(cipher)
+
+
+	txt:=[]rune(str)
+	cipher:=""
+	for i:=range txt{
+		cipher+=string((i*e)%n)
+	}
+
+	txtToD:=[]rune(cipher)
+	plaintxt:=""
+
+	for i:= range txtToD{
+		plaintxt+=string((i*d)%n)
+	} 
+
+	return cipher,plaintxt
 }
 
 // rsa
